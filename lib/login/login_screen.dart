@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/io_client.dart';
-//import '../signup/signup_screen.dart';
+import '../signup/signup_screen.dart';
 import '../home/home.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -192,7 +192,6 @@ class _UserLoginWidgetState extends State<UserLogin> {
               SizedBox(
                 height: 20,
               ),
-              /*
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -219,7 +218,7 @@ class _UserLoginWidgetState extends State<UserLogin> {
                     ),
                   )
                 ],
-              ),*/
+              ),
             ],
           ),
         ),

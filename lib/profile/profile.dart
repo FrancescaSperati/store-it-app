@@ -7,10 +7,8 @@ import '../login/login_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import '../util/UserDTO.dart';
 
-final String LOGOUT_USER_URI =
-    "https://0.0.0.0:3002/api/validateUser/signout";
-    final String UPDATE_USER_URI =
-    "https://0.0.0.0:3002/api/validateUser/update";
+final String LOGOUT_USER_URI = "https://0.0.0.0:3002/api/validateUser/signout";
+final String UPDATE_USER_URI = "https://0.0.0.0:3002/api/validateUser/update";
     
 
 class ProfilePage extends StatefulWidget {
@@ -29,8 +27,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
   String userName = "";
   String userEmail = "";
   String userPicture = "";
-  TextEditingController emailEditingContrller = TextEditingController();
-  TextEditingController nameEditingContrller = TextEditingController();
+  TextEditingController nameEditingContrller;
 
   Future<void> _optionsDialogBox() {
     return showDialog(
@@ -124,6 +121,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
   @override
   void initState() {
     print("USER: ${widget.activeUser.userName}");
+    nameEditingContrller = new TextEditingController(text: widget.activeUser.userName);
     super.initState();
   }
 
@@ -250,27 +248,6 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                             style: BorderStyle.solid))),
                     ),
                     SizedBox(height: 10),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: emailEditingContrller,
-                      decoration: InputDecoration(
-                        contentPadding:  EdgeInsets.all(15.0),
-                        labelText: widget.activeUser.userEmail,
-                        hintText: "Email",
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: Colors.green,
-                            style: BorderStyle.solid))),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     ButtonTheme(
                   minWidth: double.infinity,
                   child: MaterialButton(
