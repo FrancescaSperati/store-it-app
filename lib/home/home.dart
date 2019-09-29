@@ -7,8 +7,10 @@ import '../profile/profile.dart';
 import '../util/list.dart';
 import '../filters/filters.dart';
 import '../util/UserDTO.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-final String GET_USER_HISTORY_URI = "https://localhost:3002/api/receipt/read";
+
+final String GET_USER_HISTORY_TOT_URI = "https://localhost:3002/api/receipt/readTot";
 
 class HomePage extends StatefulWidget {
   final UserDTO activeUser;
@@ -23,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   int _totaleACASO = 0;
   @override
   void initState() {
+    setTotal();
     super.initState();
   }
 
@@ -37,29 +40,27 @@ class _HomePageState extends State<HomePage> {
     };
     Map body = {"userId": userId};
     // make POST request
-    var response = await http.post(GET_USER_HISTORY_URI, headers: headers, body: jsonEncode(body));
+    var response = await http.post(GET_USER_HISTORY_TOT_URI, headers: headers, body: jsonEncode(body));
     print('response: ' + response.body);
+    int resp = int.parse(response.body);
     //print(int.parse(response.body)+1);
     if (response.statusCode == 200) {
-      return int.parse(response.body) ;
+      return resp;
     } else {
       return -1;
     }
   }
 
-  void setTotal() {
-    getUserHistory(widget.activeUser.userId)
-    .then((tot) {
-      print(tot);
-      if(tot != -1)
-        _totaleACASO = tot;
+  setTotal() async{
+    int tot = await getUserHistory(widget.activeUser.userId);
+    setState(() {
+      _totaleACASO = tot;
     });
   }
   
 
   @override
   Widget build(BuildContext context) {
-    setTotal();
     UserDTO user = widget.activeUser;
     return MaterialApp(
       title: 'Store-it-APP',
@@ -85,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => setState(() {
                 Navigator.of(context).push(MaterialPageRoute<Null>(
                   builder: (BuildContext context) {
-                    return new FiltersPage();
+                    return new FiltersPage(user);
                 }));
               }),
             ),
@@ -97,7 +98,11 @@ class _HomePageState extends State<HomePage> {
             child: CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
-                  title: Text(
+                  title: _totaleACASO == 0 
+                  ? SpinKitSpinningCircle(
+                      color: Colors.black,
+                      size: 50.0,
+                    ) : Text(
                     'Total: $_totaleACASO',
                     style: TextStyle(
                       color: Colors.black,
@@ -110,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => BodyLayout(),
+                    (context, index) => BodyLayout(user,"","","",""),
                     childCount: 1,
                   ),
                 ),

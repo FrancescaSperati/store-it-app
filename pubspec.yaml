@@ -22,6 +22,7 @@ dev_dependencies:
     sdk: flutter
   flutter_cupertino_date_picker: ^1.0.12
   intl: ^0.15.8
+  flutter_spinkit: ^4.0.0
 
 flutter:
   uses-material-design: true

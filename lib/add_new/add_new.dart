@@ -78,7 +78,7 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
     });
   }
 
-  Future<bool> addExpense(receiptId, userId, date, business, name, amount) async {
+  Future<bool> addExpense(String receiptId,String  userId,String  date,String  business,String  name,String  amount) async {
 
     receiptId = dateNow.replaceAll("-", "").replaceAll(" ", "").replaceAll(".", "").replaceAll(":", "");
 
@@ -91,8 +91,8 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
       "Accept": "application/json",
       "Content-type": "application/json"
     };
-    Map body = {"receiptId": receiptId, "userId": userId, "date": date, "business": business, 
-                "name": name, "amount": amount};
+    Map body = {"receiptId": receiptId, "userId": userId, "date": date, 
+                "business": business, "name": name, "amount": amount, "picture": receiptPicture};
     // make POST request
     var response =
         await http.post(ADD_NEW_RECEIPT_URI, headers: headers, body: jsonEncode(body));
@@ -101,14 +101,8 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
     print("receiptId"+ receiptId+"userId"+ userId+ "date"+ date+ "business"+ business+ 
                 "name"+ name+ "amount"+ amount);
     if (response.statusCode == 200) {
-      var responseJSON = response == "" ? "" : jsonDecode(response.body);
       print("new receipt successfully added");
-      if(responseJSON != "")
-      {
-        return true;
-      } else {
-        return false;
-      }
+      return true;
     } else {
       return false;
     }
@@ -129,6 +123,7 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
       }
     });
   }
+  
   void showAlert(BuildContext context, message) {
     showDialog(
       context: context,

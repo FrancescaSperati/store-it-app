@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:store_it_app/util/UserDTO.dart';
 import '../util/list.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 
 class FiltersPage extends StatefulWidget {
+  final UserDTO activeUser;
+  FiltersPage( @required this.activeUser);
+
   @override
   _FiltersPageWidgetState createState() => _FiltersPageWidgetState();
 }
@@ -14,6 +18,14 @@ TextEditingController nameEditingController = TextEditingController();
 TextEditingController businessEditingController = TextEditingController();
 TextEditingController amountEditingController = TextEditingController();
 String _value = '';
+UserDTO user;
+
+  @override
+  void initState() {
+    user = widget.activeUser;
+    super.initState();
+  }
+
 
   Future _selectDate() async {
     DateTime picked = await showDatePicker(
@@ -168,7 +180,7 @@ String _value = '';
                   children: <Widget>[
                     Text(_value),
                     SizedBox(height: 50),
-                    BodyLayout(),
+                    BodyLayout(user,"","","",""),
                   ],
                 )
                 
