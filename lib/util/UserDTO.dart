@@ -4,7 +4,8 @@ class UserDTO {
   final String userEmail;
   final String password;
   final String sessionKey;
+  final String userId;
 
 
-  UserDTO(this.userName, this.userEmail, this.password, this.sessionKey);
+  UserDTO(this.userId, this.userName, this.userEmail, this.password, this.sessionKey);
 }

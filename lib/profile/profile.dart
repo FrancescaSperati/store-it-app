@@ -27,6 +27,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
   String userName = "";
   String userEmail = "";
   String userPicture = "";
+  String userId = "";
   TextEditingController nameEditingContrller;
 
   Future<void> _optionsDialogBox() {
@@ -129,7 +130,6 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     UserDTO updatedUser = widget.activeUser;
-
 
     return MaterialApp(
       home: Scaffold(
@@ -265,7 +265,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => HomePage(
-                                  activeUser: UserDTO(userName, userEmail, updatedUser.password, updatedUser.sessionKey),
+                                  activeUser: UserDTO(userId, userName, userEmail, updatedUser.password, updatedUser.sessionKey),
                                 )),
                             );
                           }

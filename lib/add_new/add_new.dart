@@ -1,20 +1,39 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:store_it_app/home/home.dart';
 import 'dart:io';
+import 'package:store_it_app/util/UserDTO.dart';
+
+final String ADD_NEW_RECEIPT_URI = "https://localhost:3002/api/receipt/add";
 
 class AddNewReceipt extends StatefulWidget {
+  final UserDTO activeUser;
+  AddNewReceipt({Key key, @required this.activeUser}) : super(key: key);
+
   @override
   _AddNewReceiptWidgetState createState() => _AddNewReceiptWidgetState();
 }
 
 class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
-  TextEditingController nameContrller = TextEditingController();
-  TextEditingController dateContrller = TextEditingController();
-  TextEditingController businessContrller = TextEditingController();
-  TextEditingController amountContrller = TextEditingController();
-  TextEditingController pictureContrller = TextEditingController();
   
+  final _addNew_key = GlobalKey<FormState>();
   File _image;
+  String userId = "";
+  String dateNow = new DateTime.now().toString();
+  String receiptId;
+  String receiptAmount = "";
+  String receiptName = "";
+  String receiptBusiness = "";
+  String receiptDate = "";
+  String receiptPicture = "hgds";
+
+  @override
+  void initState() {
+    userId =  widget.activeUser.userId;
+    super.initState();
+  }
 
   Future<void> _optionsDialogBox() {
     return showDialog(
@@ -59,13 +78,69 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
     });
   }
 
+  Future<bool> addExpense(receiptId, userId, date, business, name, amount) async {
 
+    receiptId = dateNow.replaceAll("-", "").replaceAll(" ", "").replaceAll(".", "").replaceAll(":", "");
 
+    HttpClient client = HttpClient();
+    client.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
+    final http = new IOClient(client);
 
+    Map<String, String> headers = {
+      "Accept": "application/json",
+      "Content-type": "application/json"
+    };
+    Map body = {"receiptId": receiptId, "userId": userId, "date": date, "business": business, 
+                "name": name, "amount": amount};
+    // make POST request
+    var response =
+        await http.post(ADD_NEW_RECEIPT_URI, headers: headers, body: jsonEncode(body));
+    print("response: ");
+    print(response.statusCode);
+    print("receiptId"+ receiptId+"userId"+ userId+ "date"+ date+ "business"+ business+ 
+                "name"+ name+ "amount"+ amount);
+    if (response.statusCode == 200) {
+      var responseJSON = response == "" ? "" : jsonDecode(response.body);
+      print("new receipt successfully added");
+      if(responseJSON != "")
+      {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
+  void addNewReceipt() {
+    print(receiptId);
+    addExpense(receiptId, userId, receiptDate, receiptBusiness, receiptName, receiptAmount).then((isValid) {
+      print(isValid);
+      if (isValid) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(activeUser: widget.activeUser)
+            ));
+      } else {
+        showAlert(context, "Invalid Receipt details, please try again.");
+      }
+    });
+  }
+  void showAlert(BuildContext context, message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Error!"),
+        content: Text("$message"),
+      ));
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -82,17 +157,16 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
         body: Container(
         color: Colors.white,
         padding: EdgeInsets.all(24),
-        child: Center(
+        child: Form(
+          key: _addNew_key,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
 
-              
-                _image == null
-                  ? Text('No image selected.')
-                  : Image.file(_image),
-                SizedBox(height: 10),
-
+              _image == null
+                ? Text('No image selected.')
+                : Image.file(_image),
+              SizedBox(height: 10),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -118,9 +192,19 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
               ),
               SizedBox(height: 10),
               
-              TextField(
+              TextFormField(
+                onChanged: (text) {
+                  setState(() {
+                    receiptName = text;
+                  });
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter a name for the expense';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.text,
-                controller: nameContrller,
                 decoration: InputDecoration(
                     labelText: "Name",
                     hintText: "Name",
@@ -137,9 +221,19 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
               ),
               SizedBox(height: 10),
 
-              TextField(
+              TextFormField(
+                onChanged: (text) {
+                  setState(() {
+                    receiptDate = text;
+                  });
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter the date of the expense';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.datetime,
-                controller: dateContrller,
                 decoration: InputDecoration(
                     labelText: "Date",
                     hintText: "Date",
@@ -156,9 +250,19 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
               ),
               SizedBox(height: 10),
 
-              TextField(
+              TextFormField(
+                onChanged: (text) {
+                  setState(() {
+                    receiptBusiness = text;
+                  });
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter the business name';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.text,
-                controller: businessContrller,
                 decoration: InputDecoration(
                     labelText: "Business",
                     hintText: "Business",
@@ -175,9 +279,19 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
               ),
               SizedBox(height: 10),
 
-              TextField(
+              TextFormField(
+                onChanged: (text) {
+                  setState(() {
+                    receiptAmount = text;
+                  });
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Enter the amount of the expense';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
-                controller: amountContrller,
                 decoration: InputDecoration(
                     labelText: "Amount",
                     hintText: "Amount",
@@ -202,8 +316,10 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   onPressed: () { 
-                    print("checking all fields BEFORE ADDING A NEW ROW");
-                    Navigator.pop(context);
+                    if (_addNew_key.currentState.validate()) {
+                      print("checking all fields BEFORE ADDING A NEW ROW");
+                      addNewReceipt();
+                    }
                   },
                   textColor: Colors.white,
                   color: Colors.green,

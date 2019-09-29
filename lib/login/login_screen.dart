@@ -22,8 +22,7 @@ class _UserLoginWidgetState extends State<UserLogin> {
   String userEmail = "";
   String sessionKey = "";
   String userName = "";
-  TextEditingController emailEditingContrller = TextEditingController();
-  TextEditingController pwdEditingContrller = TextEditingController();
+  String userId = "";
 
   Future<bool> validateUser(userEmail, password) async {
     HttpClient client = HttpClient();
@@ -42,6 +41,7 @@ class _UserLoginWidgetState extends State<UserLogin> {
     if (response.statusCode == 200) {
       var responseJSON = response == "" ? "" : jsonDecode(response.body);
       userName = responseJSON["user"]["displayName"] == null ? "Anonymous" : responseJSON["user"]["displayName"];
+      userId = responseJSON["user"]["uid"].toString();
       print(userName);
       if(responseJSON != "")
       {
@@ -62,7 +62,7 @@ class _UserLoginWidgetState extends State<UserLogin> {
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(
-              activeUser: new UserDTO(userName, userEmail, password, sessionKey),
+              activeUser: new UserDTO(userId, userName, userEmail, password, sessionKey),
             )),
         );
       } else {
@@ -117,7 +117,6 @@ class _UserLoginWidgetState extends State<UserLogin> {
                         return null;
                       },
                       keyboardType: TextInputType.emailAddress,
-                      controller: emailEditingContrller,
                       decoration: InputDecoration(
                           labelText: "Email",
                           hintText: "Email",
@@ -204,8 +203,6 @@ class _UserLoginWidgetState extends State<UserLogin> {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       onPressed: () {
-                        //Use`Navigator` widget to push the second screen to out stack of screens
-
                         Navigator.of(context).push(MaterialPageRoute<Null>(
                             builder: (BuildContext context) {
                           return new SignupScreen();

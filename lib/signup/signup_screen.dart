@@ -25,13 +25,7 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
   String userEmail = "";
   String sessionKey = "";
   String userName = "";
-  TextEditingController emailEditingContrller = TextEditingController();
-  TextEditingController pwdEditingContrller = TextEditingController();
-  TextEditingController nameEditingContrller = TextEditingController();
-  TextEditingController confPwdEditingContrller = TextEditingController();
-
-
-
+  String userId = "";
 
   Future<bool> signupNewUser(userEmail, userPassword) async {
     HttpClient client = HttpClient();
@@ -48,7 +42,7 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
     var response = await http.post(SIGNUP_USER_URI, headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
       var responseJSON = response == "" ? "" : jsonDecode(response.body);
-      
+
       if(responseJSON != "")
       {
         return true;
@@ -73,7 +67,6 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
 
-
     void signup() {
     signupNewUser(userEmail, userPassword).then((isValid) {
       print(isValid);
@@ -82,7 +75,7 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(
-              activeUser: UserDTO(userName, userEmail, userPassword, sessionKey),
+              activeUser: UserDTO(userId, userName, userEmail, userPassword, sessionKey),
             )),
         );
       } else {
@@ -92,7 +85,7 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
   }
 
 
-  
+
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       body: Container(
@@ -128,7 +121,6 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                         return null;
                       },
                       keyboardType: TextInputType.text,
-                      controller: nameEditingContrller,
                       decoration: InputDecoration(
                           labelText: "Name",
                           hintText: "Name",
@@ -157,7 +149,6 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                         return null;
                       },
                       keyboardType: TextInputType.emailAddress,
-                      controller: emailEditingContrller,
                       decoration: InputDecoration(
                           labelText: "Email",
                           hintText: "Email",
@@ -208,7 +199,6 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                       },
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
-                      controller: pwdEditingContrller,
                       decoration: InputDecoration(
                           labelText: "Confirm Password",
                           hintText: "Confirm Password",
