@@ -109,9 +109,7 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
   }
 
   void addNewReceipt() {
-    print(receiptId);
     addExpense(receiptId, userId, receiptDate, receiptBusiness, receiptName, receiptAmount).then((isValid) {
-      print(isValid);
       if (isValid) {
         Navigator.push(
           context,

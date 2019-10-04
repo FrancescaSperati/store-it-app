@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:store_it_app/util/UserDTO.dart';
 import '../util/list.dart';
@@ -5,8 +7,8 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 
 class FiltersPage extends StatefulWidget {
-  final UserDTO activeUser;
-  FiltersPage( @required this.activeUser);
+  final BodyLayout lista;
+  FiltersPage(this.lista);
 
   @override
   _FiltersPageWidgetState createState() => _FiltersPageWidgetState();
@@ -18,11 +20,10 @@ TextEditingController nameEditingController = TextEditingController();
 TextEditingController businessEditingController = TextEditingController();
 TextEditingController amountEditingController = TextEditingController();
 String _value = '';
-UserDTO user;
+
 
   @override
   void initState() {
-    user = widget.activeUser;
     super.initState();
   }
 
@@ -103,7 +104,7 @@ UserDTO user;
                       style: TextStyle(fontSize: 12)
                     ),
                   ),
-                 SizedBox(height: 30),
+                  SizedBox(height: 30),
 
                   RaisedButton(
                     onPressed: () {
@@ -180,7 +181,8 @@ UserDTO user;
                   children: <Widget>[
                     Text(_value),
                     SizedBox(height: 50),
-                    BodyLayout(user,"","","",""),
+                    widget.lista
+                    
                   ],
                 )
                 

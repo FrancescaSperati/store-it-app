@@ -39,7 +39,7 @@ class _UserLoginWidgetState extends State<UserLogin> {
     var response =
         await http.post(VALIDATE_USER_URI, headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
-      var responseJSON = response == "" ? "" : jsonDecode(response.body);
+      var responseJSON = response == "" ? "" : json.decode(response.body);                 //jsonList = json.decode(response.body);
       userName = responseJSON["user"]["displayName"] == null ? "Anonymous" : responseJSON["user"]["displayName"];
       userId = responseJSON["user"]["uid"].toString();
       print(userName);
@@ -203,10 +203,14 @@ class _UserLoginWidgetState extends State<UserLogin> {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute<Null>(
+                        /*Navigator.of(context).push(MaterialPageRoute<Null>(
                             builder: (BuildContext context) {
                           return new SignupScreen();
-                        }));
+                        }));*/
+                        Navigator.of(context).push(MaterialPageRoute<Null>(
+                            builder: (BuildContext context) {
+                            return new HomePage( activeUser: new UserDTO("NJDAuXoh9ygNLXZGizyClU4922d2", "fra", "fra@test.com", "password", sessionKey));
+                          }));
                       },
                       textColor: Colors.white,
                       color: Colors.blue,
