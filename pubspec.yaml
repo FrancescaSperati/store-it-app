@@ -25,7 +25,15 @@ dev_dependencies:
   flutter_spinkit: ^4.0.0
 
 flutter:
-  uses-material-design: true
   assets:
     - assets/
-  
+  fonts:
+    - family: Rock_Salt
+      fonts:
+        - asset: RockSalt-Regular.ttf
+          weight: 400
+    - family: Roboto
+      fonts:
+        - asset: Roboto-Regular.ttf
+          weight: 400
+  uses-material-design: true

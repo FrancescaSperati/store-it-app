@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
       title: 'Store-it-APP',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
+        fontFamily: 'Roboto'
       ),
       home: UserLogin(),
     );

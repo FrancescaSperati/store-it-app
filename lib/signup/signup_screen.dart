@@ -1,18 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/io_client.dart';
 import 'package:path/path.dart';
 import 'package:store_it_app/util/UserDTO.dart';
-import '../login/login_screen.dart';
 import '../home/home.dart';
 
 final String SIGNUP_USER_URI = "https://0.0.0.0:3002/api/validateUser/addUser";
 
 
 class SignupScreen extends StatefulWidget {
-  SignupScreen({Key key}) : super(key: key);
   @override
   _SignupScreenWidgetSate createState() => _SignupScreenWidgetSate();
 }
@@ -41,7 +38,7 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
     // make POST request
     var response = await http.post(SIGNUP_USER_URI, headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
-      var responseJSON = response == "" ? "" : jsonDecode(response.body);
+      var responseJSON = response.body == "" ? "" : jsonDecode(response.body);
 
       if(responseJSON != "")
       {
@@ -89,26 +86,47 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       body: Container(
-        color: Colors.white,
+        decoration: BoxDecoration(
+          // Box decoration takes a gradient
+          gradient: LinearGradient(
+            // Where the linear gradient begins and ends
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            // Add one stop for each color. Stops should increase from 0 to 1
+            stops: [0.1, 0.2, 0.7, 0.9],
+            colors: [
+              // Colors are easy thanks to Flutter's Colors class.
+              Colors.redAccent[400],
+              Colors.pinkAccent[400],
+              Colors.orange[600],
+              Colors.orange[300],
+            ],
+          ),
+        ),
         padding: EdgeInsets.all(24),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Hero(
-                tag: "logo",
-                child: Container(
-                  child: Image.asset('assets/logo.jpg'),
-                  width: 150,
-                ),
-              ),
+             
               SizedBox(height: 50),
               Form(
                 key: _signup_key,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      "sia",
+                      style: TextStyle(
+                        fontSize: 80.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Rock_Salt",
+                      ),
+                    ),
                     TextFormField(
+
+                      style: new TextStyle(color: Colors.white),
                       onChanged: (text) {
                         setState(() {
                           userName = text;
@@ -123,20 +141,28 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           labelText: "Name",
-                          hintText: "Name",
+                          hintText: "Name",errorStyle: TextStyle(
+                            color: Colors.redAccent[100], 
+                            ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          hintStyle: TextStyle(color: Colors.white),
                           labelStyle: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 16,
                           ),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.green,
-                                  style: BorderStyle.solid))),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          )),
                     ),
                     SizedBox(height: 30),
                     TextFormField(
+                      style: new TextStyle(color: Colors.white),
                       onChanged: (text) {
                         setState(() {
                           userEmail = text;
@@ -152,42 +178,57 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                       decoration: InputDecoration(
                           labelText: "Email",
                           hintText: "Email",
+                          errorStyle: TextStyle(
+                            color: Colors.redAccent[100], 
+                            ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          hintStyle: TextStyle(color: Colors.white),
                           labelStyle: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 16,
                           ),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.green,
-                                  style: BorderStyle.solid))),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          )),
                     ),
                     SizedBox(
                       height: 30,
                     ),
                     TextFormField(
+                      style: new TextStyle(color: Colors.white),
                       key: passKey,
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
                       decoration: InputDecoration(
                           labelText: "Password",
                           hintText: "Password",
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          hintStyle: TextStyle(color: Colors.white),
                           labelStyle: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 16,
                           ),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.green,
-                                  style: BorderStyle.solid))),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          )),
                     ),
                     SizedBox(
                       height: 30,
                     ),
                     TextFormField(
+                      style: new TextStyle(color: Colors.white),
                       validator: (confirmation){
                         var confPassword = passKey.currentState.value;
                         return equals(confirmation, confPassword) ? null : "Confirm Password should match password";
@@ -202,16 +243,24 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                       decoration: InputDecoration(
                           labelText: "Confirm Password",
                           hintText: "Confirm Password",
+                          errorStyle: TextStyle(
+                            color: Colors.redAccent[100], 
+                            ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 2),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          hintStyle: TextStyle(color: Colors.white),
                           labelStyle: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 16,
                           ),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.green,
-                                  style: BorderStyle.solid))),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          )),
                     ),
                     SizedBox(
                       height: 50,
@@ -230,7 +279,7 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                           }
                         },
                         textColor: Colors.white,
-                        color: Colors.green,
+                        color: Colors.green[300],
                         height: 50,
                         child: Text("SIGNUP"),
                       ),
@@ -254,13 +303,10 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                       onPressed: () {
                         //Use`Navigator` widget to push the second screen to out stack of screens
 
-                        Navigator.of(context).push(MaterialPageRoute<Null>(
-                            builder: (BuildContext context) {
-                          return new UserLogin();
-                        }));
+                        Navigator.pop(context);
                       },
                       textColor: Colors.white,
-                      color: Colors.blue,
+                      color: Colors.blue[300],
                       height: 50,
                       child: Text("or Login"),
                     ),

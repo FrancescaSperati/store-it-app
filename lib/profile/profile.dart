@@ -39,13 +39,6 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
             child: new ListBody(
               children: <Widget>[
                 GestureDetector(
-                  child: new Text('Take a picture'),
-                  onTap: getImage,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                ),
-                GestureDetector(
                   child: new Text('Select from gallery'),
                   onTap: getImageFromGallery,
                 ),
@@ -56,7 +49,6 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
       }
     );
   }
-
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(
@@ -76,8 +68,6 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
     });
   }
 
-
-  
   Future<bool> logoutUser() async {
     HttpClient client = HttpClient();
     client.badCertificateCallback =
@@ -107,7 +97,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
       var response = await http.post(UPDATE_USER_URI, headers: headers, body: jsonEncode(body));
       if (response.statusCode == 200) {
         print("User successfully updated!");
-        var responseJSON = response == "" ? "" : jsonDecode(response.body);
+        var responseJSON = response.body == "" ? "" : jsonDecode(response.body);
         if(responseJSON != "")
         {
           return true;
@@ -134,6 +124,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.redAccent[400],
           leading: IconButton(
               icon: const Icon(Icons.keyboard_arrow_left),
               tooltip: 'Back', 
@@ -175,7 +166,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                       }
                     },
                     textColor: Colors.white,
-                    color: Colors.red,
+                    color: Colors.red[700],
                     height: 35,
                     child: new Text(
                       "LOGOUT",
@@ -212,7 +203,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                           _optionsDialogBox();
                         },
                         textColor: Colors.white,
-                        color: Colors.blue,
+                        color: Colors.blue[400],
                         height: 50,
                         child: Icon(Icons.photo),
                       ),
@@ -233,18 +224,25 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                       keyboardType: TextInputType.text,
                       controller: nameEditingContrller,
                       decoration: InputDecoration(
+                        
+                          
                         contentPadding:  EdgeInsets.all(15.0),
                         labelText: updatedUser.userName,
                         hintText: "Name",
                         labelStyle: TextStyle(
-                          color: Colors.black,
+                          
+                          color: Colors.redAccent[400],
                           fontSize: 16,
                         ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.redAccent[400], width: 2),
+                          ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                           borderSide: BorderSide(
                             width: 1,
-                            color: Colors.green,
+                            color: Colors.redAccent[400],
                             style: BorderStyle.solid))),
                     ),
                     SizedBox(height: 10),
@@ -271,7 +269,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                           }
                         },
                         textColor: Colors.white,
-                        color: Colors.blue,
+                        color: Colors.blue[400],
                         height: 50,
                         child: Text("Update"),
                   ),

@@ -5,7 +5,6 @@ import 'package:http/io_client.dart';
 import '../add_new/add_new.dart';
 import '../profile/profile.dart';
 import '../util/list.dart';
-import '../filters/filters.dart';
 import '../util/UserDTO.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -24,13 +23,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _totaleACASO = 0;
   bool filtri = false;
-
-  TextEditingController nameEditingController = TextEditingController();
-  TextEditingController businessEditingController = TextEditingController();
-  TextEditingController amountEditingController = TextEditingController();
   String _value = "";
   String filterBy = "";
-  String  name = "", date ="", business="", amount="";
+  String name = "", date = "", business = "", amount = "";
 
   @override
   void initState() {
@@ -38,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  Future<int> getUserHistory(userId) async {
+  Future<int> getUserTotal(userId) async {
     HttpClient client = HttpClient();
     client.badCertificateCallback =
         (X509Certificate cert, String host, int port) => true;
@@ -52,8 +47,11 @@ class _HomePageState extends State<HomePage> {
     var response = await http.post(GET_USER_HISTORY_TOT_URI,
         headers: headers, body: jsonEncode(body));
     print('response: ' + response.body);
-    int resp;
-    resp = int.parse(response.body);
+    var checkBody = jsonDecode(response.body);
+    print(checkBody);
+    int resp=0;
+    if(response.body!="")
+      resp = int.parse(response.body);
 
     //print(int.parse(response.body)+1);
     if (response.statusCode == 200) {
@@ -78,21 +76,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   setTotal() async {
-    int tot = await getUserHistory(widget.activeUser.userId);
+    int tot = await getUserTotal(widget.activeUser.userId);
     setState(() {
       _totaleACASO = tot;
     });
   }
 
-  filterTheList(){
-    if(filterBy!= ""){
-      //filtra
-      
-    }else{
-      //non filtrare
+  filterTheList() {
+    if ((filterBy == "") || (filterBy == "NO FILTERS!!")) {
+      name = ""; 
+      date = ""; 
+      business = ""; 
+      amount = "";
+    } else {
+      if(filterBy=="name")
+        name=_value;
+        else if(filterBy=="date")
+        date=_value;
+        else if(filterBy=="amount")
+        amount=_value;
+        else 
+        business=_value;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +107,7 @@ class _HomePageState extends State<HomePage> {
       title: 'Store-it-APP',
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.redAccent[400],
           title: Text('Store-it-APP'),
           actions: <Widget>[
             IconButton(
@@ -123,260 +130,307 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverAppBar(
-                  title: _totaleACASO == 0
-                      ? SpinKitSpinningCircle(
-                          color: Colors.black,
-                          size: 50.0,
-                        )
-                      : Text('Total: $_totaleACASO',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20)),
-                  floating: true,
-                  expandedHeight: 60,
-                  backgroundColor: Colors.white,
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      filtri
-                          ? Column(
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    RaisedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _value = "";
-                                          filterBy = "";
-                                        });
+        body: Container(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    title: _totaleACASO == 0
+                        ? SpinKitSpinningCircle(
+                            color: Colors.black,
+                            size: 20.0,
+                          )
+                        : Text('Total: $_totaleACASO',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20)),
+                    floating: true,
+                    expandedHeight: 60,
+                    backgroundColor: Colors.transparent,
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        filtri
+                            ? Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      ButtonTheme(
+                                        minWidth: 5,
+                                        padding: new EdgeInsets.all(13.0),
+                                        child: RaisedButton(
 
-                                        return showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: TextField(
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _value = value;
-                                                      filterBy = "name";
-                                                    });
-                                                  },
-                                                  controller:
-                                                      nameEditingController,
-                                                  decoration: InputDecoration(
-                                                      labelText: "Name",
-                                                      hintText: "Name",
-                                                      prefixIcon: Icon(
-                                                          Icons.filter_list),
-                                                      border: OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      25.0)))),
-                                                ),
-                                              ),
+                      textColor: Colors.white,
+                      color: Colors.blue[300],
+                                          onPressed: () {
+                                            setState(() {
+                                              _value = "";
+                                              filterBy = "";
+                                            });
+
+                                            return showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: TextField(
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _value = value;
+                                                          filterBy = "name";
+                                                        });
+                                                      },
+                                                      
+                                                      decoration: InputDecoration(
+                                                          labelText: "Name",
+                                                          hintText: "Name",
+                                                          prefixIcon: Icon(
+                                                              Icons.filter_list),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.all(
+                                                                      Radius.circular(
+                                                                          25.0)))),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      },
-                                      child: Text('Name',
-                                          style: TextStyle(fontSize: 12)),
-                                    ),
-                                    SizedBox(height: 30),
-                                    RaisedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _value = "";
-                                          filterBy = "";
-                                        });
-                                        _selectDate();
-                                      },
-                                      child: Text('Date',
-                                          style: TextStyle(fontSize: 12)),
-                                    ),
-                                    SizedBox(height: 30),
-                                    RaisedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _value = "";
-                                          filterBy = "business";
-                                        });
-                                        return showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: TextField(
-                                                  onChanged: (value) {
-                                                    setState(
-                                                        () => _value = value);
-                                                  },
-                                                  controller:
-                                                      businessEditingController,
-                                                  decoration: InputDecoration(
-                                                      labelText: "Business",
-                                                      hintText: "Business",
-                                                      prefixIcon: Icon(
-                                                          Icons.filter_list),
-                                                      border: OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      25.0)))),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Text('Business',
-                                          style: TextStyle(fontSize: 12)),
-                                    ),
-                                    SizedBox(height: 30),
-                                    RaisedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _value = "";
-                                          filterBy = "";
-                                        });
-                                        return showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: TextField(
-                                                  onChanged: (value) {
-                                                    setState(
-                                                        () => _value = value);
-                                                  },
-                                                  controller:
-                                                      amountEditingController,
-                                                  decoration: InputDecoration(
-                                                      labelText: "Amount",
-                                                      hintText: "Amount",
-                                                      prefixIcon: Icon(
-                                                          Icons.filter_list),
-                                                      border: OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      25.0)))),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Text('Amount',
-                                          style: TextStyle(fontSize: 12)),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      height: 50.0,
-                                      width: 280,
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.blue,
+                                          child: Text('Name',
+                                              style: TextStyle(fontSize: 12)),
                                         ),
-                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Container(
-                                              height: 50.0,
-                                              width: 153,
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text("Filter by "),
-                                                  Text(filterBy),
-                                                ],
-                                              ),
-                                            ),
-                                            Text(_value),
-                                          ]),
-                                    ),
-                                    ButtonTheme(
-                                      minWidth: double.infinity,
-                                      child: MaterialButton(
-                                        elevation: 4,
-                                        highlightElevation: 2,
-                                        minWidth: 35,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                      SizedBox(height: 10),
+                                      ButtonTheme(
+                                        minWidth: 5,
+                                        padding: new EdgeInsets.all(13.0),
+                                        child: RaisedButton(
+
+                      textColor: Colors.white,
+                      color: Colors.blue[300],
+                                          onPressed: () {
+                                            setState(() {
+                                              _value = "";
+                                              filterBy = "";
+                                            });
+                                            _selectDate();
+                                          },
+                                          child: Text('Date',
+                                              style: TextStyle(fontSize: 12)),
                                         ),
-                                        onPressed: () {
-                                          filterTheList();
-                                        },
-                                        textColor: Colors.white,
-                                        color: Colors.red,
-                                        height: 50,
-                                        child: new Text(
-                                          "GO",
-                                          style: new TextStyle(
-                                            fontSize: 15.0,
-                                            color: Colors.white,
+                                      ),
+                                      SizedBox(height: 10),
+                                      ButtonTheme(
+                                        minWidth: 5,
+                                        padding: new EdgeInsets.all(13.0),
+                                        child: RaisedButton(
+
+                      textColor: Colors.white,
+                      color: Colors.blue[300],
+                                          onPressed: () {
+                                            setState(() {
+                                              _value = "";
+                                              filterBy = "";
+                                            });
+                                            return showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: TextField(
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _value = value;
+                                                          filterBy = "business";
+                                                        });
+                                                      },
+                                                      decoration: InputDecoration(
+                                                          labelText: "Business",
+                                                          hintText: "Business",
+                                                          prefixIcon: Icon(
+                                                              Icons.filter_list),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.all(
+                                                                      Radius.circular(
+                                                                          25.0)))),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Text('Business',
+                                              style: TextStyle(fontSize: 12)),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      ButtonTheme(
+                                        minWidth: 5,
+                                        padding: new EdgeInsets.all(13.0),
+                                        child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue[300],
+                                          onPressed: () {
+                                            setState(() {
+                                              _value = "";
+                                              filterBy ="";
+                                              filterBy = "amount";
+                                            });
+                                            return showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: TextField(
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          _value = value;
+                                                          filterBy = "amount";
+                                                        });
+                                                      },
+                                                      decoration: InputDecoration(
+                                                          labelText: "Amount",
+                                                          hintText: "Amount",
+                                                          prefixIcon: Icon(
+                                                              Icons.filter_list),
+                                                          border: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.all(
+                                                                      Radius.circular(
+                                                                          25.0)))),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Text('Amount',
+                                              style: TextStyle(fontSize: 12)),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      ButtonTheme(
+                                        minWidth: 5,
+                                        padding: new EdgeInsets.all(13.0),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.refresh),
+                                          tooltip: 'refresh',
+                                          onPressed: () => setState(() {
+                                            _value = "SHOW ALL";
+                                            filterBy = "NO FILTERS!!";
+                                          }),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        height: 50.0,
+                                        width: 280,
+                                        padding: const EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.blue,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                height: 50.0,
+                                                width: 153,
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Text("Filter by "),
+                                                    Text(filterBy),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text(_value),
+                                            ]),
+                                      ),
+                                      ButtonTheme(
+                                        minWidth: double.infinity,
+                                        child: MaterialButton(
+                                          elevation: 4,
+                                          highlightElevation: 2,
+                                          minWidth: 35,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          onPressed: () {
+                                            filterTheList();
+                                            setState(() { });
+                                          },
+                                          textColor: Colors.white,
+
+                                          color: Colors.redAccent[200],
+                                          height: 50,
+                                          child: new Text(
+                                            "GO",
+                                            style: new TextStyle(
+                                              fontSize: 15.0,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            )
-                          : SizedBox(),
-                    ],
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              )
+                            : SizedBox(),
+                      ],
+                    ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => BodyLayout(user, name, date, business, amount),
-                    childCount: 1,
+                  new SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return new BodyLayout(user, name, date, business, amount);}
+                          ,
+                      childCount: 1,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: Colors.redAccent[400],
           shape: const CircularNotchedRectangle(),
           child: Container(
             height: 50.0,
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.redAccent[200],
           onPressed: () => setState(() {
             Navigator.of(context)
                 .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
@@ -386,6 +440,7 @@ class _HomePageState extends State<HomePage> {
           tooltip: 'Add New Receipt',
           child: Icon(Icons.add),
         ),
+
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );

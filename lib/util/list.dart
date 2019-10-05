@@ -50,13 +50,53 @@ class _BodyLayoutState extends State<BodyLayout> {
       var jsonList = jsonDecode(response.body);
       receipts = List();
       for (var item in jsonList) {
-        receipts.add(ReceiptDTO(
-            item["id"].toString(),
-            item["amount"].toString(),
-            item["business"].toString(),
-            item["date"].toString(),
-            item["name"].toString(),
-            item["picture"].toString()));
+        
+        if (this.widget.name != "") {//filter by name
+          if (this.widget.name == item["name"].toString())
+            receipts.add(ReceiptDTO(
+                item["id"].toString(),
+                item["amount"].toString(),
+                item["business"].toString(),
+                item["date"].toString(),
+                item["name"].toString(),
+                item["picture"].toString()));
+                
+        } else if (this.widget.date != "") {//filter by date
+          if (this.widget.date == item["date"].toString())
+            receipts.add(ReceiptDTO(
+                item["id"].toString(),
+                item["amount"].toString(),
+                item["business"].toString(),
+                item["date"].toString(),
+                item["name"].toString(),
+                item["picture"].toString()));
+        } else if (this.widget.business != "") {//filter by business
+          if (this.widget.business == item["business"].toString())
+            receipts.add(ReceiptDTO(
+                item["id"].toString(),
+                item["amount"].toString(),
+                item["business"].toString(),
+                item["date"].toString(),
+                item["name"].toString(),
+                item["picture"].toString()));
+        } else if (this.widget.amount != "") {//filter by amount
+          if (this.widget.amount == item["amount"].toString())
+            receipts.add(ReceiptDTO(
+                item["id"].toString(),
+                item["amount"].toString(),
+                item["business"].toString(),
+                item["date"].toString(),
+                item["name"].toString(),
+                item["picture"].toString()));
+        } else {//no filters
+          receipts.add(ReceiptDTO(
+              item["id"].toString(),
+              item["amount"].toString(),
+              item["business"].toString(),
+              item["date"].toString(),
+              item["name"].toString(),
+              item["picture"].toString()));
+        }
       }
       row_count = receipts.length;
       return true;
@@ -65,29 +105,34 @@ class _BodyLayoutState extends State<BodyLayout> {
     }
   }
 
-  void setTotal() {
-    getUserHistory(widget.activeUser.userId).then((isValid) {
-    });
+  void getList() {
+    getUserHistory(widget.activeUser.userId);
   }
 
   @override
   Widget build(BuildContext context) {
-    setTotal();
-      return ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: row_count,
-        itemBuilder: (context, index) {
-          return Card(
+    getList();
+    print("refreshed!!");
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: row_count,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Card(
+            
             child: InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ReceiptDetailPage(receipts[index], widget.activeUser)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ReceiptDetailPage(receipts[index], widget.activeUser)),
                 );
               },
               child: Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: const EdgeInsets.all(13.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -97,7 +142,7 @@ class _BodyLayoutState extends State<BodyLayout> {
                       children: <Widget>[
                         Text(
                           'Name',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 10),
                         ),
                         Text(receipts[index].name.toString()),
                       ],
@@ -108,7 +153,7 @@ class _BodyLayoutState extends State<BodyLayout> {
                       children: <Widget>[
                         Text(
                           'Date',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 10),
                         ),
                         Text(receipts[index].date.toString()),
                       ],
@@ -119,7 +164,7 @@ class _BodyLayoutState extends State<BodyLayout> {
                       children: <Widget>[
                         Text(
                           'Business',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 10),
                         ),
                         Text(receipts[index].business.toString()),
                       ],
@@ -130,7 +175,7 @@ class _BodyLayoutState extends State<BodyLayout> {
                       children: <Widget>[
                         Text(
                           'Amount',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 10),
                         ),
                         Text(receipts[index].amount.toString()),
                       ],
@@ -140,8 +185,9 @@ class _BodyLayoutState extends State<BodyLayout> {
                 ),
               ),
             ),
-          );
-        },
-      );
+          ),
+        );
+      },
+    );
   }
 }
