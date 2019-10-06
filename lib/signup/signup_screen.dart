@@ -42,6 +42,15 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
 
       if(responseJSON != "")
       {
+
+        userId= responseJSON["id"].toString();
+
+
+//prendi lo user
+
+
+
+
         return true;
       } else {
         return false;

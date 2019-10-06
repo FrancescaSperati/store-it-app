@@ -120,6 +120,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     UserDTO updatedUser = widget.activeUser;
+    userId=updatedUser.userId;
 
     return MaterialApp(
       home: Scaffold(
@@ -263,7 +264,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => HomePage(
-                                  activeUser: UserDTO(userId, userName, userEmail, updatedUser.password, updatedUser.sessionKey),
+                                  activeUser: UserDTO(userId, userName, updatedUser.userEmail, updatedUser.password, updatedUser.sessionKey),
                                 )),
                             );
                           }

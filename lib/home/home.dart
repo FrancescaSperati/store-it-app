@@ -47,11 +47,14 @@ class _HomePageState extends State<HomePage> {
     var response = await http.post(GET_USER_HISTORY_TOT_URI,
         headers: headers, body: jsonEncode(body));
     print('response: ' + response.body);
-    var checkBody = jsonDecode(response.body);
-    print(checkBody);
-    int resp=0;
-    if(response.body!="")
-      resp = int.parse(response.body);
+
+    int resp = 0; //initialize the total
+    if (response.body != "") {
+      //user has data
+      var checkBody = jsonDecode(response.body);
+      print(checkBody);
+      resp = int.parse(checkBody.toString());
+    }
 
     //print(int.parse(response.body)+1);
     if (response.statusCode == 200) {
@@ -71,6 +74,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _value = DateFormat("dd-MM-yyyy").format(picked).toString();
         filterBy = "date";
+        
       });
     }
   }
@@ -84,19 +88,19 @@ class _HomePageState extends State<HomePage> {
 
   filterTheList() {
     if ((filterBy == "") || (filterBy == "NO FILTERS!!")) {
-      name = ""; 
-      date = ""; 
-      business = ""; 
+      name = "";
+      date = "";
+      business = "";
       amount = "";
     } else {
-      if(filterBy=="name")
-        name=_value;
-        else if(filterBy=="date")
-        date=_value;
-        else if(filterBy=="amount")
-        amount=_value;
-        else 
-        business=_value;
+      if (filterBy == "name")
+        name = _value;
+      else if (filterBy == "date")
+        date = _value;
+      else if (filterBy == "amount")
+        amount = _value;
+      else
+        business = _value;
     }
   }
 
@@ -143,9 +147,8 @@ class _HomePageState extends State<HomePage> {
                             size: 20.0,
                           )
                         : Text('Total: $_totaleACASO',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20)),
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 20)),
                     floating: true,
                     expandedHeight: 60,
                     backgroundColor: Colors.transparent,
@@ -159,15 +162,15 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       ButtonTheme(
                                         minWidth: 5,
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
-
-                      textColor: Colors.white,
-                      color: Colors.blue[300],
+                                          textColor: Colors.white,
+                                          color: Colors.blue[300],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
@@ -179,7 +182,8 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context) {
                                                 return AlertDialog(
                                                   content: Padding(
-                                                    padding: EdgeInsets.all(8.0),
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
                                                     child: TextField(
                                                       onChanged: (value) {
                                                         setState(() {
@@ -187,19 +191,27 @@ class _HomePageState extends State<HomePage> {
                                                           filterBy = "name";
                                                         });
                                                       },
-                                                      
                                                       decoration: InputDecoration(
                                                           labelText: "Name",
                                                           hintText: "Name",
-                                                          prefixIcon: Icon(
-                                                              Icons.filter_list),
+                                                          prefixIcon: Icon(Icons
+                                                              .filter_list),
                                                           border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius.circular(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
                                                                           25.0)))),
                                                     ),
                                                   ),
+                                                  actions: <Widget>[
+                                                    FlatButton(
+                                                      child: Text('Confirm'),
+                                                      onPressed: () {
+                                                        filterTheList();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
                                                 );
                                               },
                                             );
@@ -213,18 +225,19 @@ class _HomePageState extends State<HomePage> {
                                         minWidth: 5,
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
-
-                      textColor: Colors.white,
-                      color: Colors.blue[300],
+                                          textColor: Colors.white,
+                                          color: Colors.blue[300],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
                                               filterBy = "";
                                             });
                                             _selectDate();
+
                                           },
                                           child: Text('Date',
                                               style: TextStyle(fontSize: 12)),
+
                                         ),
                                       ),
                                       SizedBox(height: 10),
@@ -232,9 +245,8 @@ class _HomePageState extends State<HomePage> {
                                         minWidth: 5,
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
-
-                      textColor: Colors.white,
-                      color: Colors.blue[300],
+                                          textColor: Colors.white,
+                                          color: Colors.blue[300],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
@@ -245,7 +257,8 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context) {
                                                 return AlertDialog(
                                                   content: Padding(
-                                                    padding: EdgeInsets.all(8.0),
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
                                                     child: TextField(
                                                       onChanged: (value) {
                                                         setState(() {
@@ -256,15 +269,24 @@ class _HomePageState extends State<HomePage> {
                                                       decoration: InputDecoration(
                                                           labelText: "Business",
                                                           hintText: "Business",
-                                                          prefixIcon: Icon(
-                                                              Icons.filter_list),
+                                                          prefixIcon: Icon(Icons
+                                                              .filter_list),
                                                           border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius.circular(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
                                                                           25.0)))),
                                                     ),
                                                   ),
+                                                  actions: <Widget>[
+                                                    FlatButton(
+                                                      child: Text('Confirm'),
+                                                      onPressed: () {
+                                                        filterTheList();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
                                                 );
                                               },
                                             );
@@ -278,12 +300,11 @@ class _HomePageState extends State<HomePage> {
                                         minWidth: 5,
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
-                      textColor: Colors.white,
-                      color: Colors.blue[300],
+                                          textColor: Colors.white,
+                                          color: Colors.blue[300],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
-                                              filterBy ="";
                                               filterBy = "amount";
                                             });
                                             return showDialog(
@@ -291,7 +312,8 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context) {
                                                 return AlertDialog(
                                                   content: Padding(
-                                                    padding: EdgeInsets.all(8.0),
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
                                                     child: TextField(
                                                       onChanged: (value) {
                                                         setState(() {
@@ -302,15 +324,24 @@ class _HomePageState extends State<HomePage> {
                                                       decoration: InputDecoration(
                                                           labelText: "Amount",
                                                           hintText: "Amount",
-                                                          prefixIcon: Icon(
-                                                              Icons.filter_list),
+                                                          prefixIcon: Icon(Icons
+                                                              .filter_list),
                                                           border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius.circular(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
                                                                           25.0)))),
                                                     ),
                                                   ),
+                                                  actions: <Widget>[
+                                                    FlatButton(
+                                                      child: Text('Confirm'),
+                                                      onPressed: () {
+                                                        filterTheList();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
                                                 );
                                               },
                                             );
@@ -329,6 +360,7 @@ class _HomePageState extends State<HomePage> {
                                           onPressed: () => setState(() {
                                             _value = "SHOW ALL";
                                             filterBy = "NO FILTERS!!";
+                                            filterTheList();
                                           }),
                                         ),
                                       ),
@@ -340,7 +372,8 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Container(
                                         height: 50.0,
@@ -350,7 +383,8 @@ class _HomePageState extends State<HomePage> {
                                           border: Border.all(
                                             color: Colors.blue,
                                           ),
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Row(
                                             mainAxisAlignment:
@@ -383,10 +417,9 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           onPressed: () {
                                             filterTheList();
-                                            setState(() { });
+                                            setState(() {});
                                           },
                                           textColor: Colors.white,
-
                                           color: Colors.redAccent[200],
                                           height: 50,
                                           child: new Text(
@@ -410,10 +443,42 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   new SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return new BodyLayout(user, name, date, business, amount);}
-                          ,
+
+
+
+
+
+                      delegate: 
+                         SliverChildBuilderDelegate(
+                            (context, index) {
+                              if(_totaleACASO!=0){
+                                return new BodyLayout(
+                                user, name, date, business, amount);
+                              }else{
+                                return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(height: 100,),
+          Text("Nothing to show", 
+                                        style: TextStyle( fontSize: 30.0, color: Colors.black,
+                                      )),
+                                      SizedBox(height: 50,),
+                                      Text("Start adding new elements to your Store", 
+                                        style: TextStyle( fontSize: 20.0, color: Colors.black,
+                                      ))
+                                      
+                                      ]);
+                              }
+                                
+                            },
+                    
+
+
+                    // delegate: SliverChildBuilderDelegate(
+                    //   (context, index) {
+                    //     return new BodyLayout(
+                    //         user, name, date, business, amount);
+                    //   },
                       childCount: 1,
                     ),
                   ),
@@ -440,7 +505,6 @@ class _HomePageState extends State<HomePage> {
           tooltip: 'Add New Receipt',
           child: Icon(Icons.add),
         ),
-
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
