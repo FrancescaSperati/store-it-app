@@ -51,7 +51,7 @@ class ReceiptDetailPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.redAccent[400],
+          backgroundColor: Colors.lightGreen[700],
           leading: IconButton(
             icon: const Icon(Icons.keyboard_arrow_left),
             tooltip: 'Back',
@@ -148,7 +148,7 @@ class ReceiptDetailPage extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     textColor: Colors.white,
-                    color: Colors.blue[400],
+                    color: Colors.red[400],
                     height: 50,
                     child: Text("Delete"),
                   ),

@@ -41,17 +41,16 @@ class _UserLoginWidgetState extends State<UserLogin> {
         headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
       var responseJSON;
-      if (response.body == "") {
+      if (response.body == "0") {
         responseJSON = "";
       } else {
         responseJSON = json.decode(response.body);
+        userName = responseJSON["user"]["displayName"];
+        userId = responseJSON["user"]["uid"].toString();
       } //jsonList = json.decode(response.body);
-      userName = responseJSON["user"]["displayName"] == null
-          ? "Anonymous"
-          : responseJSON["user"]["displayName"];
-      userId = responseJSON["user"]["uid"].toString();
-      print(userName);
+
       if (responseJSON != "") {
+        //user validated
         return true;
       } else {
         return false;
@@ -100,13 +99,15 @@ class _UserLoginWidgetState extends State<UserLogin> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             // Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0.1, 0.2, 0.7, 0.9],
+            stops: [0.1, 0.3, 0.5, 0.7, 0.9],
             colors: [
               // Colors are easy thanks to Flutter's Colors class.
-              Colors.redAccent[400],
-              Colors.pinkAccent[400],
-              Colors.orange[600],
-              Colors.orange[300],
+
+              Colors.lightGreen[700],
+              Colors.lime[600],
+              Colors.lime[400],
+              Colors.yellow[300],
+              Colors.yellow[400],
             ],
           ),
         ),
@@ -123,8 +124,16 @@ class _UserLoginWidgetState extends State<UserLogin> {
                   fontWeight: FontWeight.bold,
                   fontFamily: "Rock_Salt",
                 ),
-              ),
-              SizedBox(height: 50),
+              ),Text(
+                      "LOGIN",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Rock_Salt",
+                      ),
+                    ),
+                    SizedBox(height: 30),
               Form(
                 key: _login_key,
                 child: Column(
@@ -152,9 +161,8 @@ class _UserLoginWidgetState extends State<UserLogin> {
                                 BorderSide(color: Colors.white, width: 2),
                           ),
                           errorStyle: TextStyle(
-                            
-                            color: Colors.redAccent[100], 
-                            ),
+                            color: Colors.redAccent[100],
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white),
                           ),
@@ -188,8 +196,8 @@ class _UserLoginWidgetState extends State<UserLogin> {
                           labelText: "Password",
                           hintText: "Password",
                           errorStyle: TextStyle(
-                            color: Colors.redAccent[100], 
-                            ),
+                            color: Colors.redAccent[100],
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 2),

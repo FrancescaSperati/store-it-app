@@ -8,7 +8,6 @@ import '../home/home.dart';
 
 final String SIGNUP_USER_URI = "https://0.0.0.0:3002/api/validateUser/addUser";
 
-
 class SignupScreen extends StatefulWidget {
   @override
   _SignupScreenWidgetSate createState() => _SignupScreenWidgetSate();
@@ -36,20 +35,15 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
     };
     Map body = {"userEmail": userEmail, "password": userPassword};
     // make POST request
-    var response = await http.post(SIGNUP_USER_URI, headers: headers, body: jsonEncode(body));
+    var response = await http.post(SIGNUP_USER_URI,
+        headers: headers, body: jsonEncode(body));
     if (response.statusCode == 200) {
       var responseJSON = response.body == "" ? "" : jsonDecode(response.body);
 
-      if(responseJSON != "")
-      {
-
-        userId= responseJSON["id"].toString();
-
+      if (responseJSON != "") {
+        userId = responseJSON["id"].toString();
 
 //prendi lo user
-
-
-
 
         return true;
       } else {
@@ -62,35 +56,44 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
 
   void showAlert(BuildContext context, message) {
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Error!"),
-        content: Text("$message"),
-      ));
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Error!"),
+              content: Text("$message"),
+            ));
   }
 
-  
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else if (value.isEmpty) {
+      return 'Enter your Email';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-
     void signup() {
-    signupNewUser(userEmail, userPassword).then((isValid) {
-      print(isValid);
-      if (isValid) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(
-              activeUser: UserDTO(userId, userName, userEmail, userPassword, sessionKey),
-            )),
-        );
-      } else {
-        showAlert(context, "Invalid User details, please try again.");
-      }
-    });
-  }
-
-
+      signupNewUser(userEmail, userPassword).then((isValid) {
+        print(isValid);
+        if (isValid) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomePage(
+                      activeUser: UserDTO(userId, userName, userEmail,
+                          userPassword, sessionKey),
+                    )),
+          );
+        } else {
+          showAlert(context, "Invalid User details, please try again.");
+        }
+      });
+    }
 
     return Scaffold(
       //resizeToAvoidBottomInset: false,
@@ -102,13 +105,14 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             // Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0.1, 0.2, 0.7, 0.9],
+            stops: [0.1, 0.3, 0.5, 0.7, 0.9],
             colors: [
               // Colors are easy thanks to Flutter's Colors class.
-              Colors.redAccent[400],
-              Colors.pinkAccent[400],
-              Colors.orange[600],
+              Colors.pink,
+              Colors.pink[400],
+              Colors.orange[500],
               Colors.orange[300],
+              Colors.yellow[100],
             ],
           ),
         ),
@@ -117,7 +121,6 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-             
               SizedBox(height: 50),
               Form(
                 key: _signup_key,
@@ -133,8 +136,17 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                         fontFamily: "Rock_Salt",
                       ),
                     ),
+                    Text(
+                      "SIGN-UP",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Rock_Salt",
+                      ),
+                    ),
+                    SizedBox(height: 30),
                     TextFormField(
-
                       style: new TextStyle(color: Colors.white),
                       onChanged: (text) {
                         setState(() {
@@ -150,9 +162,10 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           labelText: "Name",
-                          hintText: "Name",errorStyle: TextStyle(
-                            color: Colors.redAccent[100], 
-                            ),
+                          hintText: "Name",
+                          errorStyle: TextStyle(
+                            color: Colors.redAccent[100],
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 2),
@@ -177,19 +190,14 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                           userEmail = text;
                         });
                       },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Enter your Email';
-                        }
-                        return null;
-                      },
+                      validator: validateEmail,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           labelText: "Email",
                           hintText: "Email",
                           errorStyle: TextStyle(
-                            color: Colors.redAccent[100], 
-                            ),
+                            color: Colors.redAccent[100],
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 2),
@@ -238,9 +246,11 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                     ),
                     TextFormField(
                       style: new TextStyle(color: Colors.white),
-                      validator: (confirmation){
+                      validator: (confirmation) {
                         var confPassword = passKey.currentState.value;
-                        return equals(confirmation, confPassword) ? null : "Confirm Password should match password";
+                        return equals(confirmation, confPassword)
+                            ? null
+                            : "Confirm Password should match password";
                       },
                       onChanged: (text) {
                         setState(() {
@@ -253,8 +263,8 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
                           labelText: "Confirm Password",
                           hintText: "Confirm Password",
                           errorStyle: TextStyle(
-                            color: Colors.redAccent[100], 
-                            ),
+                            color: Colors.redAccent[100],
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 2),

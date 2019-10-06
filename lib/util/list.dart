@@ -10,11 +10,11 @@ final String GET_USER_HISTORY_URI =
     "https://localhost:3002/api/receipt/readHistory";
 
 class BodyLayout extends StatefulWidget {
-  final UserDTO activeUser;
-  final String name;
-  final String date;
-  final String business;
-  final String amount;
+   UserDTO activeUser;
+   String name;
+   String date;
+   String business;
+   String amount;
 
   BodyLayout(this.activeUser, this.name, this.date, this.business, this.amount);
 
@@ -112,7 +112,9 @@ class _BodyLayoutState extends State<BodyLayout> {
   @override
   Widget build(BuildContext context) {
     getList();
-    print("refreshed!!");
+    print("building the list!!");
+    String userBobyLayout = widget.activeUser.userId;
+    print("user from the Bodylayout: $userBobyLayout");
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,

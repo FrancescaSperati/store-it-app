@@ -74,7 +74,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _value = DateFormat("dd-MM-yyyy").format(picked).toString();
         filterBy = "date";
-        
       });
     }
   }
@@ -111,14 +110,13 @@ class _HomePageState extends State<HomePage> {
       title: 'Store-it-APP',
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.redAccent[400],
+          backgroundColor: Colors.lightGreen[700],
           title: Text('Store-it-APP'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.account_circle),
               tooltip: 'Profile',
               onPressed: () => setState(() {
-                print('user id: ' + user.userId);
                 Navigator.of(context).push(
                     MaterialPageRoute<Null>(builder: (BuildContext context) {
                   return new ProfilePage(activeUser: user);
@@ -135,6 +133,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: Container(
+          
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -170,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
                                           textColor: Colors.white,
-                                          color: Colors.blue[300],
+                                          color: Colors.lime[400],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
@@ -226,18 +225,16 @@ class _HomePageState extends State<HomePage> {
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
                                           textColor: Colors.white,
-                                          color: Colors.blue[300],
+                                          color: Colors.lime[400],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
                                               filterBy = "";
                                             });
                                             _selectDate();
-
                                           },
                                           child: Text('Date',
                                               style: TextStyle(fontSize: 12)),
-
                                         ),
                                       ),
                                       SizedBox(height: 10),
@@ -246,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
                                           textColor: Colors.white,
-                                          color: Colors.blue[300],
+                                          color: Colors.lime[400],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
@@ -301,7 +298,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: new EdgeInsets.all(13.0),
                                         child: RaisedButton(
                                           textColor: Colors.white,
-                                          color: Colors.blue[300],
+                                          color: Colors.lime[400],
                                           onPressed: () {
                                             setState(() {
                                               _value = "";
@@ -381,10 +378,10 @@ class _HomePageState extends State<HomePage> {
                                         padding: const EdgeInsets.all(10.0),
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Colors.blue,
+                                            color: Colors.grey[300],
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(10),
+                                              BorderRadius.circular(0),
                                         ),
                                         child: Row(
                                             mainAxisAlignment:
@@ -420,7 +417,7 @@ class _HomePageState extends State<HomePage> {
                                             setState(() {});
                                           },
                                           textColor: Colors.white,
-                                          color: Colors.redAccent[200],
+                                          color: Colors.lightGreenAccent[700],
                                           height: 50,
                                           child: new Text(
                                             "GO",
@@ -443,42 +440,34 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   new SliverList(
-
-
-
-
-
-                      delegate: 
-                         SliverChildBuilderDelegate(
-                            (context, index) {
-                              if(_totaleACASO!=0){
-                                return new BodyLayout(
-                                user, name, date, business, amount);
-                              }else{
-                                return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(height: 100,),
-          Text("Nothing to show", 
-                                        style: TextStyle( fontSize: 30.0, color: Colors.black,
-                                      )),
-                                      SizedBox(height: 50,),
-                                      Text("Start adding new elements to your Store", 
-                                        style: TextStyle( fontSize: 20.0, color: Colors.black,
-                                      ))
-                                      
-                                      ]);
-                              }
-                                
-                            },
-                    
-
-
-                    // delegate: SliverChildBuilderDelegate(
-                    //   (context, index) {
-                    //     return new BodyLayout(
-                    //         user, name, date, business, amount);
-                    //   },
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        if (_totaleACASO != 0) {
+                          return new BodyLayout(
+                              user, name, date, business, amount);
+                        } else {
+                          return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 100,
+                                ),
+                                Text("Nothing to show",
+                                    style: TextStyle(
+                                      fontSize: 30.0,
+                                      color: Colors.black,
+                                    )),
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                Text("Start adding new elements to your Store",
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: Colors.black,
+                                    ))
+                              ]);
+                        }
+                      },
                       childCount: 1,
                     ),
                   ),
@@ -488,14 +477,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.redAccent[400],
+          color: Colors.lightGreen[700],
           shape: const CircularNotchedRectangle(),
           child: Container(
             height: 50.0,
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.redAccent[200],
+          backgroundColor: Colors.lightGreenAccent[700],
           onPressed: () => setState(() {
             Navigator.of(context)
                 .push(MaterialPageRoute<Null>(builder: (BuildContext context) {

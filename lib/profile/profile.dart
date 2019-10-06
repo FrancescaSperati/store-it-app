@@ -12,7 +12,7 @@ final String UPDATE_USER_URI = "https://0.0.0.0:3002/api/validateUser/update";
     
 
 class ProfilePage extends StatefulWidget {
-  final UserDTO activeUser;
+   UserDTO activeUser;
   ProfilePage({Key key, @required this.activeUser}) : super(key: key);
   
   @override
@@ -111,7 +111,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
 
   @override
   void initState() {
-    print("USER: ${widget.activeUser.userName}");
+    print("USER name: ${widget.activeUser.userName}");
     nameEditingContrller = new TextEditingController(text: widget.activeUser.userName);
     super.initState();
   }
@@ -125,11 +125,12 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.redAccent[400],
+          backgroundColor: Colors.lightGreen[700],
           leading: IconButton(
               icon: const Icon(Icons.keyboard_arrow_left),
               tooltip: 'Back', 
               onPressed: () {
+                print("context: $context");
                 Navigator.pop(context);
               },
           ),
@@ -158,6 +159,8 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                       var isLogged = true;                    
                       isLogged = await logoutUser();
                       print("trying to logout $isLogged");
+                      updatedUser = null;
+
                       if(!isLogged){
                         
                         Navigator.of(context).push(MaterialPageRoute(
@@ -270,7 +273,7 @@ class _ProfilePageWidgetSate extends State<ProfilePage> {
                           }
                         },
                         textColor: Colors.white,
-                        color: Colors.blue[400],
+                        color: Colors.lightGreen[700],
                         height: 50,
                         child: Text("Update"),
                   ),
