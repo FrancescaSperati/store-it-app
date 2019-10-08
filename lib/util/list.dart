@@ -7,7 +7,7 @@ import 'UserDTO.dart';
 import 'ReceiptDTO.dart';
 
 final String GET_USER_HISTORY_URI =
-    "https://localhost:3002/api/receipt/readHistory";
+    "https://10.1.6.133:3002/api/receipt/readHistory";
 
 class BodyLayout extends StatefulWidget {
    UserDTO activeUser;

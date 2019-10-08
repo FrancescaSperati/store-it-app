@@ -5,7 +5,7 @@ import 'package:http/io_client.dart';
 import 'package:store_it_app/util/ReceiptDTO.dart';
 import 'package:store_it_app/util/UserDTO.dart';
 
-final String DELETE_RECEIPT_URI = "https://localhost:3002/api/receipt/delete";
+final String DELETE_RECEIPT_URI = "https://10.1.6.133:3002/api/receipt/delete";
 
 class ReceiptDetailPage extends StatelessWidget {
   final ReceiptDTO receipt;

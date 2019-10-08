@@ -7,8 +7,8 @@ import '../login/login_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import '../util/UserDTO.dart';
 
-final String LOGOUT_USER_URI = "https://0.0.0.0:3002/api/validateUser/signout";
-final String UPDATE_USER_URI = "https://0.0.0.0:3002/api/validateUser/update";
+final String LOGOUT_USER_URI = "https://10.1.6.133:3002/api/validateUser/signout";
+final String UPDATE_USER_URI = "https://10.1.6.133:3002/api/validateUser/update";
     
 
 class ProfilePage extends StatefulWidget {

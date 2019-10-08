@@ -10,7 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 final String GET_USER_HISTORY_TOT_URI =
-    "https://localhost:3002/api/receipt/readTot";
+    "https://10.1.6.133:3002/api/receipt/readTot";
 
 class HomePage extends StatefulWidget {
   final UserDTO activeUser;
@@ -374,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                                     children: <Widget>[
                                       Container(
                                         height: 50.0,
-                                        width: 280,
+                                        width: 250,
                                         padding: const EdgeInsets.all(10.0),
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -391,7 +391,7 @@ class _HomePageState extends State<HomePage> {
                                             children: <Widget>[
                                               Container(
                                                 height: 50.0,
-                                                width: 153,
+                                                width: 150,
                                                 child: Row(
                                                   children: <Widget>[
                                                     Text("Filter by "),
@@ -452,7 +452,7 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   height: 100,
                                 ),
-                                Text("Nothing to show",
+                                Text(":) Nothing to show",
                                     style: TextStyle(
                                       fontSize: 30.0,
                                       color: Colors.black,

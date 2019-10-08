@@ -7,7 +7,7 @@ import 'package:store_it_app/util/UserDTO.dart';
 import '../util/UserDTO.dart';
 import 'package:intl/intl.dart';
 
-final String ADD_NEW_RECEIPT_URI = "https://localhost:3002/api/receipt/add";
+final String ADD_NEW_RECEIPT_URI = "https://10.1.6.133:3002/api/receipt/add";
 
 class AddNewReceipt extends StatefulWidget {
   final UserDTO activeUser;
@@ -136,7 +136,7 @@ class _AddNewReceiptWidgetState extends State<AddNewReceipt> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.redAccent[400],
+          backgroundColor: Colors.lightGreen[700],
           leading: IconButton(
             icon: const Icon(Icons.keyboard_arrow_left),
             tooltip: 'Back',

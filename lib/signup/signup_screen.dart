@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:store_it_app/util/UserDTO.dart';
 import '../home/home.dart';
 
-final String SIGNUP_USER_URI = "https://0.0.0.0:3002/api/validateUser/addUser";
+final String SIGNUP_USER_URI = "https://10.1.6.133:3002/api/validateUser/addUser";
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -117,222 +117,224 @@ class _SignupScreenWidgetSate extends State<SignupScreen> {
           ),
         ),
         padding: EdgeInsets.all(24),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 50),
-              Form(
-                key: _signup_key,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        child: SingleChildScrollView(
+                  child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 50),
+                Form(
+                  key: _signup_key,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "sia",
+                        style: TextStyle(
+                          fontSize: 80.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Rock_Salt",
+                        ),
+                      ),
+                      Text(
+                        "SIGN-UP",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Rock_Salt",
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        style: new TextStyle(color: Colors.white),
+                        onChanged: (text) {
+                          setState(() {
+                            userName = text;
+                          });
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Enter your Name';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            labelText: "Name",
+                            hintText: "Name",
+                            errorStyle: TextStyle(
+                              color: Colors.redAccent[100],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                            )),
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        style: new TextStyle(color: Colors.white),
+                        onChanged: (text) {
+                          setState(() {
+                            userEmail = text;
+                          });
+                        },
+                        validator: validateEmail,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            labelText: "Email",
+                            hintText: "Email",
+                            errorStyle: TextStyle(
+                              color: Colors.redAccent[100],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      TextFormField(
+                        style: new TextStyle(color: Colors.white),
+                        key: passKey,
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                            labelText: "Password",
+                            hintText: "Password",
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      TextFormField(
+                        style: new TextStyle(color: Colors.white),
+                        validator: (confirmation) {
+                          var confPassword = passKey.currentState.value;
+                          return equals(confirmation, confPassword)
+                              ? null
+                              : "Confirm Password should match password";
+                        },
+                        onChanged: (text) {
+                          setState(() {
+                            userPassword = text;
+                          });
+                        },
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                            labelText: "Confirm Password",
+                            hintText: "Confirm Password",
+                            errorStyle: TextStyle(
+                              color: Colors.redAccent[100],
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                            )),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      ButtonTheme(
+                        minWidth: double.infinity,
+                        child: MaterialButton(
+                          elevation: 4,
+                          highlightElevation: 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            print("creating a new user");
+                            if (_signup_key.currentState.validate()) {
+                              signup();
+                            }
+                          },
+                          textColor: Colors.white,
+                          color: Colors.green[300],
+                          height: 50,
+                          child: Text("SIGNUP"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                      "sia",
-                      style: TextStyle(
-                        fontSize: 80.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Rock_Salt",
-                      ),
-                    ),
-                    Text(
-                      "SIGN-UP",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Rock_Salt",
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    TextFormField(
-                      style: new TextStyle(color: Colors.white),
-                      onChanged: (text) {
-                        setState(() {
-                          userName = text;
-                        });
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Enter your Name';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          labelText: "Name",
-                          hintText: "Name",
-                          errorStyle: TextStyle(
-                            color: Colors.redAccent[100],
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                          hintStyle: TextStyle(color: Colors.white),
-                          labelStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                          )),
-                    ),
-                    SizedBox(height: 30),
-                    TextFormField(
-                      style: new TextStyle(color: Colors.white),
-                      onChanged: (text) {
-                        setState(() {
-                          userEmail = text;
-                        });
-                      },
-                      validator: validateEmail,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          labelText: "Email",
-                          hintText: "Email",
-                          errorStyle: TextStyle(
-                            color: Colors.redAccent[100],
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                          hintStyle: TextStyle(color: Colors.white),
-                          labelStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    TextFormField(
-                      style: new TextStyle(color: Colors.white),
-                      key: passKey,
-                      obscureText: true,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                          labelText: "Password",
-                          hintText: "Password",
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                          hintStyle: TextStyle(color: Colors.white),
-                          labelStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    TextFormField(
-                      style: new TextStyle(color: Colors.white),
-                      validator: (confirmation) {
-                        var confPassword = passKey.currentState.value;
-                        return equals(confirmation, confPassword)
-                            ? null
-                            : "Confirm Password should match password";
-                      },
-                      onChanged: (text) {
-                        setState(() {
-                          userPassword = text;
-                        });
-                      },
-                      obscureText: true,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                          labelText: "Confirm Password",
-                          hintText: "Confirm Password",
-                          errorStyle: TextStyle(
-                            color: Colors.redAccent[100],
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                          hintStyle: TextStyle(color: Colors.white),
-                          labelStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
                     ButtonTheme(
-                      minWidth: double.infinity,
+                      minWidth: 100,
                       child: MaterialButton(
                         elevation: 4,
                         highlightElevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         onPressed: () {
-                          print("creating a new user");
-                          if (_signup_key.currentState.validate()) {
-                            signup();
-                          }
+                          //Use`Navigator` widget to push the second screen to out stack of screens
+
+                          Navigator.pop(context);
                         },
                         textColor: Colors.white,
-                        color: Colors.green[300],
+                        color: Colors.blue[300],
                         height: 50,
-                        child: Text("SIGNUP"),
+                        child: Text("or Login"),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    )
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  ButtonTheme(
-                    minWidth: 100,
-                    child: MaterialButton(
-                      elevation: 4,
-                      highlightElevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      onPressed: () {
-                        //Use`Navigator` widget to push the second screen to out stack of screens
-
-                        Navigator.pop(context);
-                      },
-                      textColor: Colors.white,
-                      color: Colors.blue[300],
-                      height: 50,
-                      child: Text("or Login"),
-                    ),
-                  )
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

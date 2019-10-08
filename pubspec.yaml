@@ -12,10 +12,9 @@ dependencies:
     sdk: flutter
   http: ^0.12.0+2
   cupertino_icons: ^0.1.2
-  camera:
-  path_provider:
-  path:
-  image_picker: "^0.4.5"
+  camera: ^0.2.9+1
+  path_provider: ^0.4.1
+  image_picker: ^0.4.5
 
 dev_dependencies:
   flutter_test:
